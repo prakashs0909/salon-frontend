@@ -3,7 +3,7 @@ import bookingContext from "../context/booking/bookingContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const MyAppointments = () => {
-  const host = "https://salon-backend-sigma.vercel.app/";
+  const host = "https://salon-backend-sigma.vercel.app";
   const context = useContext(bookingContext);
   const { booking, fetchuserbooking } = context;
 

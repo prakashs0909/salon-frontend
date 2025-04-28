@@ -3,7 +3,7 @@ import bookingContext from "../context/booking/bookingContext";
 import Filters from "./Filters";
 
 const AppointmentCard = () => {
-  const host = "https://salon-backend-sigma.vercel.app/";
+  const host = "https://salon-backend-sigma.vercel.app";
   const context = useContext(bookingContext);
   const { booking, fetchbooking } = context;
   const [searchTerm, setSearchTerm] = useState({

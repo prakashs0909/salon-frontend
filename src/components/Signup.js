@@ -7,7 +7,7 @@ const Signup = (props) => {
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
-    const response = await fetch(`https://salon-backend-sigma.vercel.app//api/auth/createuser`, {
+    const response = await fetch(`https://salon-backend-sigma.vercel.app/api/auth/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

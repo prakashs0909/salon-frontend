@@ -35,7 +35,7 @@ const BookingForm = (props) => {
     const fetchClosedDates = async () => {
       try {
         const response = await axios.get(
-          "https://salon-backend-sigma.vercel.app//api/salonStatus/status"
+          "https://salon-backend-sigma.vercel.app/api/salonStatus/status"
         );
         setClosedDates(response.data.closedDates);
       } catch (error) {

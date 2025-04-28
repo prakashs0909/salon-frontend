@@ -17,7 +17,7 @@ const AdminService = () => {
     const fetchSalonStatus = async () => {
       try {
         const response = await axios.get(
-          "https://salon-backend-sigma.vercel.app//api/salonStatus/status"
+          "https://salon-backend-sigma.vercel.app/api/salonStatus/status"
         );
         setIsSalonOpen(response.data.isSalonOpen);
       } catch (error) {
@@ -28,7 +28,7 @@ const AdminService = () => {
     const fetchClosedDates = async () => {
       try {
         const response = await axios.get(
-          "https://salon-backend-sigma.vercel.app//api/salonStatus/status"
+          "https://salon-backend-sigma.vercel.app/api/salonStatus/status"
         );
         setClosedDates(response.data.closedDates);
       } catch (error) {
@@ -77,7 +77,7 @@ const AdminService = () => {
       setIsSalonOpen(newStatus);
 
       // Update status in the database
-      await axios.put("https://salon-backend-sigma.vercel.app//api/salonStatus/status", {
+      await axios.put("https://salon-backend-sigma.vercel.app/api/salonStatus/status", {
         isSalonOpen: newStatus,
       });
     } catch (error) {
@@ -89,7 +89,7 @@ const AdminService = () => {
     try {
       if (!selectedDate) return;
       const response = await axios.put(
-        "https://salon-backend-sigma.vercel.app//api/salonStatus/closedDates",
+        "https://salon-backend-sigma.vercel.app/api/salonStatus/closedDates",
         {
           date: selectedDate,
         }
@@ -104,7 +104,7 @@ const AdminService = () => {
   const handleRemoveClosedDate = async (date) => {
     try {
       const response = await axios.delete(
-        "https://salon-backend-sigma.vercel.app//api/salonStatus/closedDates",
+        "https://salon-backend-sigma.vercel.app/api/salonStatus/closedDates",
         {
           data: { date },
         }

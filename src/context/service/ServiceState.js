@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ServiceContext from "./serviceContext";
 
 const ServiceState = (props) => {
-  const host = "https://salon-backend-sigma.vercel.app/";
+  const host = "https://salon-backend-sigma.vercel.app";
   const initialServices = [];
   const [service, setService] = useState(initialServices);
 

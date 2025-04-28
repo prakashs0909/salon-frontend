@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BookingContext from "./bookingContext";
 
 const BookingState = (props) => {
-  const host = "https://salon-backend-sigma.vercel.app/";
+  const host = "https://salon-backend-sigma.vercel.app";
   const initialBooking = [];
   const [booking, setBooking] = useState(initialBooking);
 
