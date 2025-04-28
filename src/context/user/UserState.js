@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import UserContext from "./userContext";
 
 const UserState = (props) => {
-  const host = "http://localhost:3001";
+  const host = "https://salon-backend-sigma.vercel.app/";
   const [user, setUser] = useState(null); // Initialize user state
 
   // get user details
