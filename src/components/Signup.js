@@ -34,23 +34,7 @@ const Signup = (props) => {
         "Verification link sent to your email. Please verify your account.",
         "success"
       );
-      const emailDomain = credential.email.split("@")[1];
-      let emailProviderUrl = "";
-
-      if (emailDomain === "gmail.com") {
-        emailProviderUrl = "https://mail.google.com/";
-      } else if (emailDomain === "yahoo.com") {
-        emailProviderUrl = "https://mail.yahoo.com/";
-      } else if (
-        emailDomain === "outlook.com" ||
-        emailDomain === "hotmail.com"
-      ) {
-        emailProviderUrl = "https://outlook.live.com/";
-      } else {
-        emailProviderUrl = `https://www.${emailDomain}`;
-      }
-
-      window.open(emailProviderUrl, "_blank");
+      window.open("https://mail.google.com/", "_blank");
     } else {
       props.showalert("User is already exist", "danger");
     }
