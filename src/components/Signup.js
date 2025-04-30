@@ -34,7 +34,6 @@ const Signup = (props) => {
         "Verification link sent to your email. Please verify your account.",
         "success"
       );
-      window.open("https://mail.google.com/", "_blank");
     } else {
       props.showalert("User is already exist", "danger");
     }
