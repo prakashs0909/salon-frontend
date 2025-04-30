@@ -26,7 +26,6 @@ const Signup = (props) => {
       }
     );
     const json = await response.json();
-    console.log(json);
     setCredential({ name: "", email: "", password: "" });
 
     if (json.success) {
@@ -35,7 +34,7 @@ const Signup = (props) => {
         "Verification link sent to your email. Please verify your account.",
         "success"
       );
-      window.location.href = "https://mail.google.com/";
+      window.location.href = json.verificationLink;
     } else {
       props.showalert("User is already exist", "danger");
     }
