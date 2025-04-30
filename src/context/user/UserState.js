@@ -16,7 +16,6 @@ const UserState = (props) => {
       });
 
       if (!response.ok) {
-        // Handle server errors
         const errorData = await response.json();
         console.error("Failed to fetch user", errorData);
         return;
@@ -24,7 +23,7 @@ const UserState = (props) => {
 
       const json = await response.json();
       // console.log(json.role);
-      setUser(json);// Save user data to state
+      setUser(json);
       return json; 
     } catch (error) {
       console.error("An error occurred while fetching the user:", error);

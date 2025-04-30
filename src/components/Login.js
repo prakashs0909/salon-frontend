@@ -12,32 +12,58 @@ const Login = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`https://salon-backend-sigma.vercel.app/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: credential.email,
-          password: credential.password,
-        }),
-      });
+      const response = await fetch(
+        `https://salon-backend-sigma.vercel.app/api/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: credential.email,
+            password: credential.password,
+          }),
+        }
+      );
       const json = await response.json();
 
       if (json.success) {
-        // Save auth token
         localStorage.setItem("token", json.authToken);
 
         // Fetch user data
-      const userData = await getuser(); // Ensure getuser() returns user data
+        const userData = await getuser(); 
 
-      if (userData && userData.role === "admin") {
-        navigate("/AppointmentList");
+        if (userData && userData.role === "admin") {
+          navigate("/AppointmentList");
+        } else {
+          navigate("/Home");
+        }
       } else {
-        navigate("/Home");
-      }
-      }else{
-        props.showalert("Invalid username and password", "danger");
+        setError(json.error);
+        console.log(json.resendVerification)
+        if (json.resendVerification) {
+          const resendResponse = await fetch(
+            `https://salon-backend-sigma.vercel.app/api/auth/resend-verification`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: credential.email,
+              }),
+            }
+          );
+          const resendJson = await resendResponse.json();
+          console.log(resendJson); // Handle resend verification response
+          if (resendJson.success) {
+            setError("Verification link resent. Please check your email.");
+          } else {
+            setError("Failed to resend verification link. Please try again.");
+          }
+          
+        }
+
       }
     } catch (error) {
       setError("Invalid username and password");
@@ -53,17 +79,17 @@ const Login = (props) => {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="d-flex justify-content-center">
           <svg
-              fill="#b690f9"
-              version="1.1"
-              id="Capa_1"
-              xmlns="http://www.w3.org/2000/svg"
-              width="40px"
-              height="40px"
-              viewBox="0 0 376.715 376.715"
-            >
-              <g>
-                <path
-                  d="M347.291,116.456c-10.813,16.763-20.879,9.692-20.879,9.692s25.725-18.018,14.911-35.417
+            fill="#b690f9"
+            version="1.1"
+            id="Capa_1"
+            xmlns="http://www.w3.org/2000/svg"
+            width="40px"
+            height="40px"
+            viewBox="0 0 376.715 376.715"
+          >
+            <g>
+              <path
+                d="M347.291,116.456c-10.813,16.763-20.879,9.692-20.879,9.692s25.725-18.018,14.911-35.417
                   c-9.318,17.031-19.01,12.687-19.01,12.687s15.285-31.435,1.868-35.417c-5.582,13.68-24.23,2.978-24.23,2.978
                   s10.93-9.079,17.516-4.46c0.129-9.208-26.46-11.192-26.46-11.192s3.468-7.952,0-11.561c-3.106,3.48-9.318,1.635-9.318,1.635
                   s4.601-15.554-5.593-16.908c3.094,10.428-12.051,11.42-11.935,6.971c-11.934-25.608-30.933-18.532-30.933-18.532
@@ -86,9 +112,9 @@ const Login = (props) => {
                   c5.874,3.082,17.68,7.449,26.705-0.877c12.483-11.571,12.483-21.812,12.483-21.812s22.735,5.22,16.955-1.296
                   c-5.769-6.516,12.121-27.762,12.121-27.762s6.819,5.085,3.725,13.796c11.047-1.751,3.363-20.143,3.363-20.143s3.095,3.106,9.681,0
                   c-6.972-3.24-4.1-21.988-4.1-21.988S355.733,141.183,347.291,116.456z"
-                />
-              </g>
-            </svg>
+              />
+            </g>
+          </svg>
         </div>
         <h2 className="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Login
