@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import userContext from "../context/user/userContext";
 
-const Login = (props) => {
+const Login = () => {
   const [credential, setCredential] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -31,7 +31,7 @@ const Login = (props) => {
         localStorage.setItem("token", json.authToken);
 
         // Fetch user data
-        const userData = await getuser(); 
+        const userData = await getuser();
 
         if (userData && userData.role === "admin") {
           navigate("/AppointmentList");
@@ -40,7 +40,7 @@ const Login = (props) => {
         }
       } else {
         setError(json.error);
-        console.log(json.resendVerification)
+        // console.log(json.resendVerification);
         if (json.resendVerification) {
           const resendResponse = await fetch(
             `https://salon-backend-sigma.vercel.app/api/auth/resend-verification`,
@@ -54,16 +54,8 @@ const Login = (props) => {
               }),
             }
           );
-          const resendJson = await resendResponse.json();
-          console.log(resendJson); // Handle resend verification response
-          if (resendJson.success) {
-            setError("Verification link resent. Please check your email.");
-          } else {
-            setError("Failed to resend verification link. Please try again.");
-          }
-          
+          await resendResponse.json();    
         }
-
       }
     } catch (error) {
       setError("Invalid username and password");
