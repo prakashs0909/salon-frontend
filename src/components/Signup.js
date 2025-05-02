@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const host = "https://salon-backend-sigma.vercel.app" || "http://localhost:3001";
+
 const Signup = (props) => {
   const [credential, setCredential] = useState({
     name: "",
@@ -11,9 +13,9 @@ const Signup = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(
-      `https://salon-backend-sigma.vercel.app/api/auth/createuser`,
-      {
+  
+    try {
+      const response = await fetch(`${host}/api/auth/createuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,19 +25,27 @@ const Signup = (props) => {
           email: credential.email,
           password: credential.password,
         }),
+      });
+  
+      const json = await response.json();
+  
+      if (json.success) {
+        props.showalert(
+          "Verification link sent to your email. Please verify your account.",
+          "success"
+        );
+        localStorage.setItem("token", json.authToken);
+        setCredential({
+          name: "", 
+          email: "",
+          password: "",
+        });
+      } else {
+        props.showalert(json.error || "Failed to create user", "danger");
       }
-    );
-    const json = await response.json();
-    setCredential({ name: "", email: "", password: "" });
-
-    if (json.success) {
-      localStorage.setItem("token", json.authToken);
-      props.showalert(
-        "Verification link sent to your email. Please verify your account.",
-        "success"
-      );
-    } else {
-      props.showalert("User is already exist", "danger");
+    } catch (error) {
+      console.error("Error during signup:", error);
+      props.showalert("Something went wrong. Please try again later.", "danger");
     }
   };
 

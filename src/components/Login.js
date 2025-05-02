@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import userContext from "../context/user/userContext";
-
+ 
+const host = "https://salon-backend-sigma.vercel.app" || "http://localhost:3001";
 const Login = () => {
   const [credential, setCredential] = useState({ email: "", password: "" });
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `https://salon-backend-sigma.vercel.app/api/auth/login`,
+        `${host}/api/auth/login`,
         {
           method: "POST",
           headers: {
@@ -43,7 +44,7 @@ const Login = () => {
         // console.log(json.resendVerification);
         if (json.resendVerification) {
           const resendResponse = await fetch(
-            `https://salon-backend-sigma.vercel.app/api/auth/resend-verification`,
+            `${host}/api/auth/resend-verification`,
             {
               method: "POST",
               headers: {
