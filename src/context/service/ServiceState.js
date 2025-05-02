@@ -44,7 +44,7 @@ const ServiceState = (props) => {
       },
     });
     const json = await response.json();
-    console.log(json);
+    // console.log(json);
 
     const newservice = service.filter((newService) => {
       return newService._id !== id;
@@ -54,7 +54,6 @@ const ServiceState = (props) => {
 
   // Edit a service
   const editservice = async (id, name, price) => {
-    // api call
     const response = await fetch(`${host}/api/services/updateservices/${id}`, {
       method: "PUT",
       headers: {
@@ -63,7 +62,7 @@ const ServiceState = (props) => {
       body: JSON.stringify({ name, price }),
     });
     const json = await response.json();
-    console.log(json);
+    // console.log(json);
 
     let NewService = JSON.parse(JSON.stringify(service));
     // logic for update

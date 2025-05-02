@@ -40,8 +40,7 @@ export const BarbarState = (props) => {
                 "Content-Type": "application/json",
             },
         });
-        const json = await response.json();
-        console.log(json);
+        await response.json();
 
         const newbarbar = barbar.filter((newBarbar) => {
             return newBarbar._id !== id;
@@ -58,9 +57,18 @@ export const BarbarState = (props) => {
             },
             body: JSON.stringify({ name }),
         });
-        const json = await response.json();
-        console.log(json);
+        await response.json();
+        let newbarbar = JSON.parse(JSON.stringify(barbar));
+        for (let index = 0; index < newbarbar.length; index++) {
+            const element = newbarbar[index];
+            if (element._id === id) {
+                newbarbar[index].name = name;
+                break;
+            }
+        }
+        setBarbar(newbarbar);
     }
+    
   return (
     <div>
         <BarbarContext.Provider value={{ barbar, getallbarbar, addbarbar, deletebarbar, editbarbar }}>
