@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import bookingContext from "../context/booking/bookingContext";
 import serviceContext from "../context/service/serviceContext";
+import barberContext from "../context/barbars/barbarContext";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,6 +9,7 @@ const BookingForm = (props) => {
   const navigate = useNavigate();
   const context = useContext(bookingContext);
   const { addbooking } = context;
+  const { barbar, getallbarbar } = useContext(barberContext);
   const { service, getallservice } = useContext(serviceContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -17,17 +19,19 @@ const BookingForm = (props) => {
     time: "",
     service: "",
     checklist: [],
+    barbar: "",
   });
   const [closedDates, setClosedDates] = useState([]);
 
   useEffect(() => {
-      try {
-        getallservice();
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
+    try {
+      getallservice();
+      getallbarbar();
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,14 +137,15 @@ const BookingForm = (props) => {
       appointmentData.name,
       appointmentData.date,
       appointmentData.time,
-      servicesList
+      servicesList,
+      appointmentData.barbar
     );
     if (result?.error) {
       setError(result.error); // Display the error message if time slot is taken
     } else {
       props.showalert("Your appointment is booked", "success");
-      setAppointmentData({ name: "", date: "", time: "", checklist: [] });
-      // Clear any previous errors
+      setAppointmentData({ name: "", date: "", time: "", checklist: [], barbar: "" });
+      setError(""); // Clear any previous errors
     }
   };
 
@@ -263,6 +268,7 @@ const BookingForm = (props) => {
                 {loading ? (
                   <p>Loading services...</p>
                 ) : (
+                  service &&
                   service.map((service) => (
                     <div key={service._id} className="flex items-center">
                       <input
@@ -282,6 +288,40 @@ const BookingForm = (props) => {
                         className="ml-2 text-gray-700"
                       >
                         {capitalize(service.name)}
+                      </label>
+                    </div>
+                  ))
+                )}
+              </div>
+            </fieldset>
+          </div>
+
+          <div className="mb-4">
+            <fieldset className="block">
+              <legend className="block text-gray-700 font-medium">
+                Select Barber:
+              </legend>
+              <div className="mt-2 space-y-2">
+                {loading ? (
+                  <p>Loading barbars...</p>
+                ) : (
+                  barbar &&
+                  barbar.map((barbar) => (
+                    <div key={barbar._id} className="flex items-center">
+                      <input
+                        type="radio"
+                        id={barbar._id}
+                        name="barbar"
+                        value={barbar.name}
+                        checked={appointmentData.barbar === barbar.name}
+                        onChange={onchange}
+                        className="form-check-input mt-0"
+                      />
+                      <label
+                        htmlFor={barbar._id}
+                        className="ml-2 text-gray-700"
+                      >
+                        {capitalize(barbar.name)}
                       </label>
                     </div>
                   ))

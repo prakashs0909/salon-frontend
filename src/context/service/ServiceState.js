@@ -43,8 +43,7 @@ const ServiceState = (props) => {
         "Content-Type": "application/json",
       },
     });
-    const json = await response.json();
-    // console.log(json);
+    await response.json();
 
     const newservice = service.filter((newService) => {
       return newService._id !== id;
@@ -61,8 +60,7 @@ const ServiceState = (props) => {
       },
       body: JSON.stringify({ name, price }),
     });
-    const json = await response.json();
-    // console.log(json);
+    await response.json();
 
     let NewService = JSON.parse(JSON.stringify(service));
     // logic for update
