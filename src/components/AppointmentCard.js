@@ -192,7 +192,6 @@ const AppointmentCard = () => {
                     {capitalize(service)}
                   </span>
                 ))}
-                <span className="text-gray-700 block font-semibold">Please reach on time otherwise your appointment is cancle</span>
                 <div className="mt-2 d-flex">
                   {item.status === "pending" && (
                     <button

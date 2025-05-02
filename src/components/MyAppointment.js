@@ -149,6 +149,7 @@ const MyAppointments = () => {
                       Time:
                       <span className="text-gray-700">{appointment.time}</span>
                     </p>
+                    <span className="text-gray-700 block font-semibold">Please reach on time otherwise your appointment is cancle.</span>
                     {appointment.service.map((service, index) => (
                       <span key={index} className="text-gray-700 block">
                         {capitalize(service)}
