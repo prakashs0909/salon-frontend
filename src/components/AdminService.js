@@ -1,14 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import serviceContext from "../context/service/serviceContext";
+import barbarContext from "../context/barbars/barbarContext";
 import { Link } from "react-router-dom";
 
 const AdminService = () => {
-  const context = useContext(serviceContext);
-  const { service, addservice, deleteservice, editservice, getallservice } =
-    context;
+  const serviceCtx = useContext(serviceContext);
+  const barbarCtx = useContext(barbarContext);
+
+  const {
+    service,
+    addservice,
+    deleteservice,
+    editservice,
+    getallservice,
+  } = serviceCtx;
+
+  const {
+    barbar,
+    getallbarbar,
+    addbarbar,
+    deletebarbar,
+    editbarbar,
+  } = barbarCtx;
+
   const [editingService, setEditingService] = useState(null);
+  const [editingBarbar, setEditingBarbar] = useState(null);
   const [services, setService] = useState({ name: "", price: "", time: "" });
+  const [barbars, setBarbar] = useState({ name: "" });
   const [isSalonOpen, setIsSalonOpen] = useState(true);
   const [closedDates, setClosedDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
@@ -39,6 +58,7 @@ const AdminService = () => {
     fetchSalonStatus();
     fetchClosedDates();
     getallservice();
+    getallbarbar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,19 +68,32 @@ const AdminService = () => {
     setService({ name: "", price: "", time: "" });
   };
 
+  const handleCreateBarbar = (e) => {
+    e.preventDefault();
+    addbarbar(barbars.name);
+    setBarbar({ name: "" });
+  };
+
   const handleInputChange = (e) => {
     setService({ ...services, [e.target.name]: e.target.value });
+    setBarbar({ ...barbars, [e.target.name]: e.target.value });
   };
 
   const handleUpdateService = (e) => {
-    // console.log("update", editingService)
     e.preventDefault();
     editservice(editingService._id, editingService.name, editingService.price);
     setEditingService(null);
   };
 
+  const handleUpdateBarbar = (e) => {
+    e.preventDefault();
+    editbarbar(editingBarbar._id, editingBarbar.name);
+    setEditingBarbar(null);
+  };
+
   const handleEditInputChange = (e) => {
     setEditingService({ ...editingService, [e.target.name]: e.target.value });
+    setEditingBarbar({ ...editingBarbar, [e.target.name]: e.target.value });
   };
 
   const capitalize = (word) => {
@@ -77,9 +110,12 @@ const AdminService = () => {
       setIsSalonOpen(newStatus);
 
       // Update status in the database
-      await axios.put("https://salon-backend-sigma.vercel.app/api/salonStatus/status", {
-        isSalonOpen: newStatus,
-      });
+      await axios.put(
+        "https://salon-backend-sigma.vercel.app/api/salonStatus/status",
+        {
+          isSalonOpen: newStatus,
+        }
+      );
     } catch (error) {
       console.error("Error updating salon status:", error);
     }
@@ -143,6 +179,33 @@ const AdminService = () => {
             <button
               className=" bg-purple-600 text-white px-3 rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50"
               onClick={() => deleteservice(service._id)}
+            >
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    );
+  });
+
+  let barbarResult = barbar.map((barbar) => {
+    return (
+      <tr key={barbar._id}>
+        {/* <td className="px-3">{barbar._id}</td> */}
+        <td className="px-3">{capitalize(barbar.name)}</td>
+        <td className="pl-3 d-flex">
+          <div className="mr-2 ">
+            <button
+              className=" bg-purple-600 text-white px-3 rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50 "
+              onClick={() => setEditingBarbar(barbar)}
+            >
+              Edit
+            </button>
+          </div>
+          <div className="mr-2">
+            <button
+              className=" bg-purple-600 text-white px-3 rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50"
+              onClick={() => deletebarbar(barbar._id)}
             >
               Delete
             </button>
@@ -256,6 +319,77 @@ const AdminService = () => {
         </table>
       </div>
 
+      <div className=" bg-gray-200 ">
+        <h1 className="text-4xl font-bold text-gray-800 p-3">Barbars</h1>
+
+        <div className="p-3">
+          <h2 className="fs-5 font-bold text-gray-800 mb-3 pl-2">
+            Add New Barbars
+          </h2>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={barbars.name}
+            onChange={handleInputChange}
+            className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-600 pl-2 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
+          />
+
+          <button
+            disabled={barbars.name.length < 3}
+            onClick={handleCreateBarbar}
+            className=" bg-purple-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50"
+          >
+            Add Barbar
+          </button>
+        </div>
+
+        {editingBarbar && (
+          <div className="p-3">
+            <h2 className="fs-5 font-bold text-gray-800 mb-3 pl-2">
+              Edit Barbar
+            </h2>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={editingBarbar.name}
+              onChange={handleEditInputChange}
+              className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-600 pl-2 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-2"
+            />
+            <div className="d-flex">
+              <div className="mr-3">
+                <button
+                  className=" bg-purple-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50"
+                  onClick={handleUpdateBarbar}
+                >
+                  Update Barbar
+                </button>
+              </div>
+              <div>
+                <button
+                  className=" bg-purple-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50"
+                  onClick={() => setEditingBarbar(null)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <table>
+          <thead>
+            <tr>
+              {/* <th className="fs-5 px-3">ID</th> */}
+              <th className="fs-5 px-3">Name</th>
+              <th className="fs-5 px-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>{barbarResult}</tbody>
+        </table>
+      </div>
+
       <div className="p-3 bg-gray-200">
         <h1 className="text-3xl font-bold text-gray-800 mb-3 pt-2">
           Salon Closed/Open Detail
@@ -297,7 +431,7 @@ const AdminService = () => {
           </button>
         </div>
         <div className="mb-3">
-        <p
+          <p
             className={`${
               isSalonOpen ? "text-green-600" : "text-red-600"
             } font-bold md:text-3xl text-2xl mx-3 `}
@@ -317,7 +451,7 @@ const AdminService = () => {
               </>
             )}
           </p>
-          </div>
+        </div>
       </div>
 
       <footer className="bg-gray-900 text-gray-300 body-font rounded-top">

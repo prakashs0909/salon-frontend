@@ -19,6 +19,7 @@ import VerifiedMail from './components/VerifiedMail';
 import MaybeShowAlert from './components/MaybeShowAlert';
 import React, {useState} from 'react';
 import Alerts from './components/Alerts';
+import { BarbarState } from './context/barbars/BarbarState';
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -36,6 +37,7 @@ function App() {
     <>
     <BookingState>
     <ServiceState>
+    <BarbarState>
     <UserState>
       <BrowserRouter>
         <MaybeShowNavbar>
@@ -61,6 +63,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </UserState>
+    </BarbarState>
     </ServiceState>
     </BookingState>
     </>
