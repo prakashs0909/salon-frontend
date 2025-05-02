@@ -39,7 +39,7 @@ const BookingState = (props) => {
   };
 
   // Add a booking
-  const addbooking = async (name, date, time, service) => {
+  const addbooking = async (name, date, time, service, barbar) => {
     const checkresponse = await fetch(`${host}/api/appointment/checkbooking`, {
       method: "POST",
       headers: {
@@ -61,7 +61,7 @@ const BookingState = (props) => {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
-      body: JSON.stringify({ name, date, time, service }),
+      body: JSON.stringify({ name, date, time, service, barbar }),
     });
     const newBooking = await response.json();
     console.log(newBooking);

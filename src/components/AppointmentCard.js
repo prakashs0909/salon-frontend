@@ -184,6 +184,9 @@ const AppointmentCard = () => {
                 <p className="font-semibold">
                   Time: <span className="text-gray-700">{item.time}</span>
                 </p>
+                <p className="font-semibold">
+                  Barber: <span className="text-gray-700"> {capitalize(item.barbar)}</span>{" "}
+                </p>
                 {item.service.map((service, index) => (
                   <span
                     key={index}

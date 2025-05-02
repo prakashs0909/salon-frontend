@@ -140,14 +140,20 @@ const MyAppointments = () => {
                       {capitalize(appointment.name)}
                     </div>
                     <p className="font-semibold">
-                      Date:
+                      Date:{" "}
                       <span className="text-gray-700">
                         {formatDate(appointment.date)}
                       </span>
                     </p>
                     <p className="font-semibold">
-                      Time:
+                      Time:{" "}
                       <span className="text-gray-700">{appointment.time}</span>
+                    </p>
+                    <p className="font-semibold">
+                      Barber:{" "}
+                      <span className="text-gray-700">
+                        {capitalize(appointment.barbar)}
+                      </span>
                     </p>
                     <span className="text-gray-700 block font-semibold">Please reach on time otherwise your appointment is cancel.</span>
                     {appointment.service.map((service, index) => (

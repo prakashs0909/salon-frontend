@@ -145,7 +145,7 @@ const BookingForm = (props) => {
     } else {
       props.showalert("Your appointment is booked", "success");
       setAppointmentData({ name: "", date: "", time: "", checklist: [], barbar: "" });
-      setError(""); // Clear any previous errors
+      // Clear any previous errors
     }
   };
 
