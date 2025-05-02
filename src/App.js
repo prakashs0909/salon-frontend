@@ -15,6 +15,7 @@ import ServiceState from './context/service/ServiceState';
 import BookingState from './context/booking/BookingState';
 import UserState from './context/user/UserState';
 import MaybeShowNavbar from './components/MaybeShowNavbar';
+import Mailverified from './components/Mailverified';
 import MaybeShowAlert from './components/MaybeShowAlert';
 import React, {useState} from 'react';
 import Alerts from './components/Alerts';
@@ -56,6 +57,7 @@ function App() {
           <Route exact path="/" element={<Login showalert={showalert}/>} />
           <Route exact path="/Signup" element={<Signup showalert={showalert} />} />
           <Route exact path="/MyAppointments" Component={MyAppointments} />
+          <Route exact path="/Mailverified" Component={Mailverified} />
         </Routes>
       </BrowserRouter>
     </UserState>
