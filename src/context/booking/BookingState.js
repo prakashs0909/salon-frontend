@@ -46,13 +46,13 @@ const BookingState = (props) => {
         "Content-Type": "application/json",
         "auth-token": localStorage.getItem("token"),
       },
-      body: JSON.stringify({ date, time }),
+      body: JSON.stringify({ date, time, barbar }),
     });
   
     const existingBookings = await checkresponse.json();
   
     if (existingBookings.length > 0) {
-      return { error: "This time slot is already booked. Please select a different time." };
+      return { error: "This time slot is already booked. Please select a different time or different baber." };
     }
 
     const response = await fetch(`${host}/api/appointment/addbooking`, {

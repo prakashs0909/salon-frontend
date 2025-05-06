@@ -126,6 +126,11 @@ const BookingForm = (props) => {
       return;
     }
 
+    if(!appointmentData.barbar) {
+      setError("Please select a barber.");  
+      return;
+    }
+
     if (closedDates.includes(appointmentData.date)) {
       setError("The salon is closed on the selected date.");
       return;
@@ -145,6 +150,7 @@ const BookingForm = (props) => {
     } else {
       props.showalert("Your appointment is booked", "success");
       setAppointmentData({ name: "", date: "", time: "", checklist: [], barbar: "" });
+      setError(""); 
       // Clear any previous errors
     }
   };
