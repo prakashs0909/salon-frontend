@@ -9,10 +9,13 @@ const Signup = (props) => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(loading) return; // Prevent multiple submissions
+    setLoading(true);
   
     try {
       const response = await fetch(`${host}/api/auth/createuser`, {
@@ -46,6 +49,8 @@ const Signup = (props) => {
     } catch (error) {
       console.error("Error during signup:", error);
       props.showalert("Something went wrong. Please try again later.", "danger");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -172,6 +177,7 @@ const Signup = (props) => {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled={loading}
             >
               Create a account
             </button>
