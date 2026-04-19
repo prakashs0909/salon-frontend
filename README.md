@@ -13,7 +13,11 @@ React, Node.js, Express, MongoDB, Tailwind CSS
 
 ## 📸 Screenshots
 
-(Add UI images here)
+<p align="center">
+  <img src="./Home.png" width="45%" />
+  <img src="./Booking.png" width="45%" />
+  <img src="./Appointments.png" width="45%" />
+</p>
 
 ## 🔗 Live Demo
 
