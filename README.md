@@ -27,7 +27,9 @@ https://salon-frontend-two.vercel.app/
 
 Clone both folder salon-frontend and salon-backend in same folder
 ```bash id="run01"
+// frontend folder
 git clone https://github.com/prakashs0909/salon-frontend.git
+// backend folder
 git clone https://github.com/prakashs0909/salon-backend.git
 ```
 
