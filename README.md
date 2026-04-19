@@ -26,6 +26,10 @@ https://salon-frontend-two.vercel.app/
 ## Setup
 
 Clone both folder salon-frontend and salon-backend in same folder
+```bash id="run01"
+git clone https://github.com/prakashs0909/salon-frontend.git
+git clone https://github.com/prakashs0909/salon-backend.git
+```
 
 ## ⚙️ Installation
 
