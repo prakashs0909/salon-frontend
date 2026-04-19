@@ -23,23 +23,81 @@ React, Node.js, Express, MongoDB, Tailwind CSS
 
 https://salon-frontend-two.vercel.app/
 
-## Setup
+## ⚙️ Installation & Setup
+
+### 1. Clone the repository
 
 Clone both folder salon-frontend and salon-backend in same folder
-```bash id="run01"
+```bash 
 // frontend folder
 git clone https://github.com/prakashs0909/salon-frontend.git
 // backend folder
 git clone https://github.com/prakashs0909/salon-backend.git
 ```
 
-## ⚙️ Installation
+### 2. Install dependencies
 
-```bash id="run01"
+#### Backend
+
+```bash
 cd backend
 npm install
-// In new terminal
+```
+
+#### Frontend
+
+```bash
 cd frontend
 npm install
+```
+
+---
+
+### 3. Setup Environment Variables
+
+Create a `.env` file in backend folder:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+PORT=3001 
+SECRET_KEY=your_secret_key
+EMAIL=your_email
+EMAIL_PASSWORD=your_email_secret_password
+FRONTEND_URL=http://localhost:3000 
+```
+
+---
+
+### 4. Run the app
+
+#### Start frontend and backend
+
+```bash
+cd frontend
 npm run both
 ```
+
+---
+
+## 📂 Folder Structure
+
+```
+Salon-Booking/
+├── backend/
+│   ├── routes/
+│   ├── models/
+│   ├── middleware/
+│   └── server.js
+├── frontend/
+│   ├── components/
+│   ├── context/
+│   └── App.js
+```
+
+---
+
+
+
+## ⭐ Show your support
+
+If you like this project, please ⭐ the repo!
