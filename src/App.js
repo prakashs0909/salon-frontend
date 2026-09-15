@@ -17,7 +17,7 @@ import UserState from "./context/user/UserState";
 import MaybeShowNavbar from "./components/MaybeShowNavbar";
 import VerifiedMail from "./components/VerifiedMail";
 import MaybeShowAlert from "./components/MaybeShowAlert";
-import React, { useState, Suspense } from "react";
+import { useState, Suspense } from "react";
 import Alerts from "./components/Alerts";
 import { BarbarState } from "./context/barbars/BarbarState";
 import Loader from "./components/Loader";
@@ -45,19 +45,17 @@ function App() {
                   <Navbar />
                 </MaybeShowNavbar>
                 <MaybeShowAlert>
-                  {/* <div className="mt-16 bg-gray-200"> */}
                   <Alerts alert={alert} />
-                  {/* </div> */}
                 </MaybeShowAlert>
                 <Suspense fallback={<Loader />}>
                   <Routes>
-                    <Route exact path="/Home" Component={Home} />
+                    <Route exact path="/" Component={Home} />
                     <Route exact path="/About" Component={About} />
                     <Route exact path="/Price" Component={Price} />
                     <Route
                       exact
                       path="/BookingForm"
-                      element={<BookingForm showalert={showalert} />}
+                      Component={BookingForm}
                     />
                     <Route
                       exact
@@ -72,8 +70,8 @@ function App() {
                     />
                     <Route
                       exact
-                      path="/"
-                      element={<Login showalert={showalert} />}
+                      path="/Login"
+                      Component={Login} 
                     />
                     <Route
                       exact

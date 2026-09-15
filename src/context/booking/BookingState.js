@@ -21,6 +21,7 @@ const BookingState = (props) => {
     // console.log(json)
     setBooking(json.appointments || json);
   };
+  
   // Get user's booking
   const fetchuserbooking = async () => {
     const response = await fetch(

@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import bookingContext from "../context/booking/bookingContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, LogOut, History, Calendar, Clock, Scissors } from "lucide-react";
+
 
 const MyAppointments = () => {
   const host = "https://salon-backend-sigma.vercel.app";
@@ -8,7 +11,7 @@ const MyAppointments = () => {
   const { booking, fetchuserbooking } = context;
 
   const [loading, setLoading] = useState(true);
-  const [setFilteredAppointments] = useState([]);
+  const [localBookings, setLocalBookings] = useState([]);
 
   const navigate = useNavigate();
 
@@ -17,32 +20,35 @@ const MyAppointments = () => {
       fetchuserbooking();
       setLoading(false);
     } else {
-      navigate("/");
+      navigate("/Login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchuserbooking]);
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(booking)) {
+      setLocalBookings(booking);
+    }
+  }, [booking]);
 
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/Login");
   };
 
   const capitalize = (word) => {
-    if (word === "danger") {
-      word = "error";
-    }
+    if (!word) return "";
     const lower = word.toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "";
     const options = { year: "numeric", month: "long", day: "numeric" };
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, options);
   };
-
-  if (loading) return <p>Loading...</p>;
 
   const cancelAppointmentbyUSer = async (appointmentId) => {
     try {
@@ -53,21 +59,18 @@ const MyAppointments = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ status: "canceled by user" }), // Update status
+          body: JSON.stringify({ status: "canceled by user" }),
         }
       );
-  
+
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Error canceling appointment:", errorText);
         throw new Error("Failed to cancel appointment");
       }
-  
-      // Update the booking state to reflect the canceled status
-      setFilteredAppointments((prevAppointments) =>
-        prevAppointments.map((appt) =>
+
+      setLocalBookings((prev) =>
+        prev.map((appt) =>
           appt._id === appointmentId
-            ? { ...appt, status: "canceled by user" } 
+            ? { ...appt, status: "canceled by user" }
             : appt
         )
       );
@@ -77,117 +80,110 @@ const MyAppointments = () => {
   };
 
   return (
-    <>
-      <ul className="flex items-center bg-gray-800 justify-content-between p-2 fixed-top">
+    <div className="bg-gray-50 min-h-screen ">
+      {/* Header */}
+      <ul className="flex items-center bg-gray-900 justify-between p-3 fixed-top z-40 text-white shadow-md">
         <button
-          className="d-flex border-0 btn btn-outline-light fs-4"
-          onClick={() => navigate("/Home")}
+          className="flex items-center gap-2 text-white hover:text-purple-400 transition"
+          onClick={() => navigate("/")}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="25"
-            height="36"
-            className="fill-current"
-          >
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M14.41 7.41L13 6l-6 6 6 6 1.41-1.41L9.83 12z" />
-          </svg>
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-semibold"></span>
         </button>
-        <li className="nav-item ">
-          <Link className="nav-link active text-white fs-4" aria-current="page">
-            History
-          </Link>
+
+        <li className="flex items-center gap-2 text-xl font-bold text-white">
+          <History className="w-5 h-5 text-purple-400" />
+          <span>History</span>
         </li>
+
         <button
-          className="d-flex border-0 btn btn-outline-light fs-4"
+          className="flex items-center gap-2 text-white hover:text-red-400 transition"
           onClick={handleLogout}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="38"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="feather feather-log-out"
-          >
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
+          <LogOut className="w-5 h-5" />
+          <span className="font-semibold">Logout</span>
         </button>
       </ul>
-      <div className="mt-16 p-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+      
+      <div className="container mx-auto mt-6 px-4 max-w-4xl">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-6">
           My Appointments
         </h1>
-        {booking.length === 0 ? (
-          <p>No appointments found</p>
+
+        {loading ? (
+          <p className="text-gray-500">Loading your history...</p>
+        ) : localBookings.length === 0 ? (
+          <div className="bg-white p-8 rounded-xl border border-gray-200 text-center">
+            <p className="text-gray-600 text-lg">No appointments found.</p>
+          </div>
         ) : (
-          <div>
-            <ol className="list-group list-group-numbered fw-bold">
-              {booking.map((appointment) => (
-                <li
+          <div className="space-y-4">
+            <AnimatePresence>
+              {localBookings.map((appointment) => (
+                <motion.div
                   key={appointment._id}
-                  className="bg-gray-100 border border-gray-300 mb-4 p-4 rounded-lg shadow-md d-flex fs-5"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition"
                 >
-                  <div className="ms-2 me-auto">
-                    <div className="fw-bold text-1xl ">
+                  <div className="space-y-2">
+                    <div className="font-semibold text-xl ">
                       {capitalize(appointment.name)}
                     </div>
-                    <p className="font-semibold">
-                      Date:{" "}
-                      <span className="text-gray-700">
-                        {formatDate(appointment.date)}
+
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4 text-gray-400" /> Date: {formatDate(appointment.date)}
                       </span>
-                    </p>
-                    <p className="font-semibold">
-                      Time:{" "}
-                      <span className="text-gray-700">{appointment.time}</span>
-                    </p>
-                    <p className="font-semibold">
-                      Barber:{" "}
-                      <span className="text-gray-700">
-                        {capitalize(appointment.barbar)}
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4 text-gray-400" /> Time: {appointment.time}
                       </span>
-                    </p>
-                    <span className="text-gray-700 block font-semibold">Please reach on time otherwise your appointment is cancel.</span>
-                    {appointment.service.map((service, index) => (
-                      <span key={index} className="text-gray-700 block">
-                        {capitalize(service)}
+                      <span className="flex items-center gap-1 font-semibold text-gray-800">
+                        <Scissors className="w-4 h-4 text-purple-600" /> Barber: {capitalize(appointment.barbar)}
                       </span>
-                    ))}
-                    {appointment.status === "canceled by user" ? (
-                      <div className="text-red-500 font-bold">
-                        Your appointment has been canceled by you
-                      </div>
-                    ) : appointment.status === "canceled" ? (
-                      <div className="text-red-500 font-bold">
-                        Your appointment has been canceled because the barber is
-                        not available
-                      </div>
-                    ) : (
-                      <div className="d-flex mt-2">
+                    </div>
+
+                    <p className="text-xs text-amber-600 font-semibold bg-amber-50 p-2 rounded-md border border-amber-200 inline-block">
+                      Please reach on time, otherwise your appointment will be canceled.
+                    </p>
+
+                    <div className="pt-2 flex flex-wrap gap-2">
+                      {appointment.service.map((srv, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2.5 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-md border border-purple-200"
+                        >
+                          {capitalize(srv)}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-3">
+                      {appointment.status === "canceled by user" ? (
+                        <div className="text-red-600 font-bold text-sm bg-red-50 px-3 py-1.5 rounded-lg border border-red-200 inline-block">
+                          Your appointment has been canceled by you
+                        </div>
+                      ) : appointment.status === "canceled" ? (
+                        <div className="text-red-600 font-bold text-sm bg-red-50 px-3 py-1.5 rounded-lg border border-red-200 inline-block">
+                          Your appointment has been canceled because the barber is not available
+                        </div>
+                      ) : (
                         <button
-                          className="p-2 border border-gray-300 rounded-md bg-gray-500 text-white mr-8"
+                          className="px-4 py-2 border border-gray-300 rounded-lg bg-gray-500 hover:bg-gray-600 text-white font-semibold text-xs transition"
                           onClick={() => cancelAppointmentbyUSer(appointment._id)}
                         >
                           Cancel Booking
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </li>
+                </motion.div>
               ))}
-            </ol>
+            </AnimatePresence>
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

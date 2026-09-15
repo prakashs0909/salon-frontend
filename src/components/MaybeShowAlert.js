@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { useLocation } from 'react-router-dom'
 
 const MaybeShowAlert = ({children}) => {
@@ -6,7 +6,7 @@ const MaybeShowAlert = ({children}) => {
     const [ShowAlert, setShowAlert] = useState(false)
 
     useEffect(()=>{
-        if(location.pathname === '/BookingForm' || location.pathname === '/Signup' || location.pathname === '/'){
+        if(location.pathname === '/Signup'){
             setShowAlert(true)
         }
         else{
